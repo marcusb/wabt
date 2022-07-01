@@ -445,7 +445,38 @@ function(wabt_executable)
   endif ()
 endfunction()
 
+# Python 3.5 is the version shipped in Ubuntu Xenial
+find_package(PythonInterp 3.5)
+if(BUILD_TESTS AND (NOT PYTHONINTERP_FOUND))
+  set(BUILD_TESTS OFF)
+  message(WARNING "Skipping tests. Python 3 is required for wabt testing. Please install python3 to run tests.")
+endif()
+
+if(BUILD_TOOLS AND (NOT PYTHONINTERP_FOUND))
+  set(BUILD_TOOLS OFF)
+  message(WARNING "Skipping tools. Python 3 is required to build tools. Please install python3 to build tools.")
+endif()
+
+set(TEMPLATE_PY ${WABT_SOURCE_DIR}/src/wasm2c_tmpl.py)
+
 if (BUILD_TOOLS)
+  # wasm2c generated code templates
+  add_custom_command(
+    OUTPUT wasm2c_header_top.c wasm2c_header_bottom.c wasm2c_source_includes.c wasm2c_source_declarations.c
+
+    COMMAND ${PYTHON_EXECUTABLE} ${TEMPLATE_PY} -o wasm2c_header_top.c ${WABT_SOURCE_DIR}/src/template/wasm2c.top.h s_header_top
+    COMMAND ${PYTHON_EXECUTABLE} ${TEMPLATE_PY} -o wasm2c_header_bottom.c ${WABT_SOURCE_DIR}/src/template/wasm2c.bottom.h s_header_bottom
+    COMMAND ${PYTHON_EXECUTABLE} ${TEMPLATE_PY} -o wasm2c_source_includes.c ${WABT_SOURCE_DIR}/src/template/wasm2c.includes.c s_source_includes
+    COMMAND ${PYTHON_EXECUTABLE} ${TEMPLATE_PY} -o wasm2c_source_declarations.c ${WABT_SOURCE_DIR}/src/template/wasm2c.declarations.c s_source_declarations
+
+    DEPENDS ${WABT_SOURCE_DIR}/src/template/wasm2c.top.h
+    ${WABT_SOURCE_DIR}/src/template/wasm2c.bottom.h
+    ${WABT_SOURCE_DIR}/src/template/wasm2c.includes.c
+    ${WABT_SOURCE_DIR}/src/template/wasm2c.declarations.c
+    )
+
+  add_library(cwriter-template wasm2c_header_top.c wasm2c_header_bottom.c wasm2c_source_includes.c wasm2c_source_declarations.c)
+
   # wat2wasm
   wabt_executable(
     NAME wat2wasm
@@ -471,6 +502,7 @@ if (BUILD_TOOLS)
   wabt_executable(
     NAME wasm2c
     SOURCES src/tools/wasm2c.cc src/c-writer.cc
+    LIBS cwriter-template
     INSTALL
   )
 
@@ -552,13 +584,6 @@ if (BUILD_TOOLS)
     )
   endif ()
 endif ()
-
-# Python 3.5 is the version shipped in Ubuntu Xenial
-find_package(PythonInterp 3.5)
-if(BUILD_TESTS AND (NOT PYTHONINTERP_FOUND))
-  set(BUILD_TESTS OFF)
-  message(WARNING "Skipping tests. Python 3 is required for wabt testing. Please install python3 to run tests.")
-endif()
 
 find_package(Threads)
 if (BUILD_TESTS)

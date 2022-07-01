@@ -33,6 +33,14 @@
 
 #define UNIMPLEMENTED(x) printf("unimplemented: %s\n", (x)), abort()
 
+extern "C" {
+// code to be inserted into the generated output
+extern const char s_header_top[];
+extern const char s_header_bottom[];
+extern const char s_source_includes[];
+extern const char s_source_declarations[];
+}
+
 namespace wabt {
 
 namespace {
@@ -293,14 +301,6 @@ class CWriter {
 };
 
 static const char kImplicitFuncLabel[] = "$Bfunc";
-
-#define SECTION_NAME(x) s_header_##x
-#include "src/prebuilt/wasm2c.include.h"
-#undef SECTION_NAME
-
-#define SECTION_NAME(x) s_source_##x
-#include "src/prebuilt/wasm2c.include.c"
-#undef SECTION_NAME
 
 size_t CWriter::MarkTypeStack() const {
   return type_stack_.size();
