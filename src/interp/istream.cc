@@ -474,6 +474,10 @@ Instr Istream::Read(Offset* offset) const {
 
     case Opcode::Select:
     case Opcode::SelectT:
+    case Opcode::F32X4QFMA:
+    case Opcode::F32X4QFMS:
+    case Opcode::F64X2QFMA:
+    case Opcode::F64X2QFMS:
       // 0 immediates, 3 operands
       instr.kind = InstrKind::Imm_0_Op_3;
       break;

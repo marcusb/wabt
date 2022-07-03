@@ -1215,6 +1215,10 @@ class Thread {
   RunResult DoSimdConvert();
   template <typename S, typename T>
   RunResult DoSimdDot();
+  template <typename S>
+  RunResult DoSimdQfma();
+  template <typename S>
+  RunResult DoSimdQfms();
   template <typename S, typename T>
   RunResult DoSimdLoadExtend(Instr, Trap::Ptr* out_trap);
   template <typename S, typename T>

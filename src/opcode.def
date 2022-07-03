@@ -501,6 +501,12 @@ WABT_OPCODE(V128, V128,  ___, ___,  0,  0xfd, 0xfd, I32X4TruncSatF64X2UZero, "i3
 WABT_OPCODE(V128, V128,  ___, ___,  0,  0xfd, 0xfe, F64X2ConvertLowI32X4S, "f64x2.convert_low_i32x4_s", "")
 WABT_OPCODE(V128, V128,  ___, ___,  0,  0xfd, 0xff, F64X2ConvertLowI32X4U, "f64x2.convert_low_i32x4_u", "")
 
+/* Relaxed-SIMD opcodes */
+WABT_OPCODE(V128, V128, V128, V128, 0,  0xfd, 0x105, F32X4QFMA, "f32x4.qfma", "")
+WABT_OPCODE(V128, V128, V128, V128, 0,  0xfd, 0x106, F32X4QFMS, "f32x4.qfms", "")
+WABT_OPCODE(V128, V128, V128, V128, 0,  0xfd, 0x107, F64X2QFMA, "f64x2.qfma", "")
+WABT_OPCODE(V128, V128, V128, V128, 0,  0xfd, 0x108, F64X2QFMS, "f64x2.qfms", "")
+
 /* Thread opcodes (--enable-threads) */
 WABT_OPCODE(I32,  I32,  I32,  ___,  4,  0xfe, 0x00, MemoryAtomicNotify, "memory.atomic.notify", "")
 WABT_OPCODE(I32,  I32,  I32,  I64,  4,  0xfe, 0x01, MemoryAtomicWait32, "memory.atomic.wait32", "")

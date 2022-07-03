@@ -1798,6 +1798,11 @@ RunResult Thread::StepInternal(Trap::Ptr* out_trap) {
 
     case O::I32X4DotI16X8S: return DoSimdDot<u32x4, s16x8>();
 
+    case O::F32X4QFMA: return DoSimdQfma<f32>();
+    case O::F32X4QFMS: return DoSimdQfms<f32>();
+    case O::F64X2QFMA: return DoSimdQfma<f64>();
+    case O::F64X2QFMS: return DoSimdQfms<f64>();
+
     case O::AtomicFence:
     case O::MemoryAtomicNotify:
     case O::MemoryAtomicWait32:
@@ -2428,6 +2433,34 @@ RunResult Thread::DoSimdDot() {
     SL lo = SL(lhs[laneidx]) * SL(rhs[laneidx]);
     SL hi = SL(lhs[laneidx + 1]) * SL(rhs[laneidx + 1]);
     result[i] = Add(lo, hi);
+  }
+  Push(result);
+  return RunResult::Ok;
+}
+
+template <typename S>
+RunResult Thread::DoSimdQfma() {
+  using SS = typename Simd128<S>::Type;
+  auto a = Pop<SS>();
+  auto b = Pop<SS>();
+  auto c = Pop<SS>();
+  SS result;
+  for (u8 i = 0; i < SS::lanes; ++i) {
+    result[i] = a[i] + b[i] * c[i];
+  }
+  Push(result);
+  return RunResult::Ok;
+}
+
+template <typename S>
+RunResult Thread::DoSimdQfms() {
+  using SS = typename Simd128<S>::Type;
+  auto a = Pop<SS>();
+  auto b = Pop<SS>();
+  auto c = Pop<SS>();
+  SS result;
+  for (u8 i = 0; i < SS::lanes; ++i) {
+    result[i] = a[i] - b[i] * c[i];
   }
   Push(result);
   return RunResult::Ok;

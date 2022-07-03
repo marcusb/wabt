@@ -101,6 +101,8 @@ f32x4.neg, TokenType::Unary, Opcode::F32X4Neg
 f32x4.ne, TokenType::Compare, Opcode::F32X4Ne
 f32x4.pmax, TokenType::Binary, Opcode::F32X4PMax
 f32x4.pmin, TokenType::Binary, Opcode::F32X4PMin
+f32x4.qfma, TokenType::Ternary, Opcode::F32X4QFMA
+f32x4.qfms, TokenType::Ternary, Opcode::F32X4QFMS
 f32x4.replace_lane, TokenType::SimdLaneOp, Opcode::F32X4ReplaceLane
 f32x4.splat, TokenType::Unary, Opcode::F32X4Splat
 f32x4.sqrt, TokenType::Unary, Opcode::F32X4Sqrt
@@ -157,6 +159,8 @@ f64x2.neg, TokenType::Unary, Opcode::F64X2Neg
 f64x2.ne, TokenType::Compare, Opcode::F64X2Ne
 f64x2.pmax, TokenType::Binary, Opcode::F64X2PMax
 f64x2.pmin, TokenType::Binary, Opcode::F64X2PMin
+f64x2.qfma, TokenType::Ternary, Opcode::F64X2QFMA
+f64x2.qfms, TokenType::Ternary, Opcode::F64X2QFMS
 f64x2.replace_lane, TokenType::SimdLaneOp, Opcode::F64X2ReplaceLane
 f64x2.splat, TokenType::Unary, Opcode::F64X2Splat
 f64x2.sqrt, TokenType::Unary, Opcode::F64X2Sqrt

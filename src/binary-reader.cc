@@ -1286,6 +1286,10 @@ Result BinaryReader::ReadInstructions(bool stop_on_end,
         break;
 
       case Opcode::V128BitSelect:
+      case Opcode::F32X4QFMA:
+      case Opcode::F32X4QFMS:
+      case Opcode::F64X2QFMA:
+      case Opcode::F64X2QFMS:
         CALLBACK(OnTernaryExpr, opcode);
         CALLBACK0(OnOpcodeBare);
         break;
